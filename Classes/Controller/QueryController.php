@@ -5,6 +5,7 @@ namespace Comsolit\ComsolitSuggest\Controller;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Psr\Http\Message\ResponseInterface;
 
 /***************************************************************
  *
@@ -30,18 +31,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-/**
- * QueryController
- */
 class QueryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
 
-    /**
-     * @return false|string
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
-     */
-    public function suggestAction()
+    public function suggestAction(): ResponseInterface
     {
         if ($this->request->hasArgument('search')) {
             $search = $this->request->getArgument('search');
@@ -55,41 +48,31 @@ class QueryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 ->leftJoin('w', 'index_rel', 'r', 'w.wid = r.wid')
                 ->leftJoin('r', 'index_phash', 'p', 'r.phash = p.phash')
                 ->where(
-                    $q->expr()->andX(
-                        $q->expr()->like('w.baseword', $q->createNamedParameter("%" . $q->escapeLikeWildcards($search) . "%", \PDO::PARAM_STR)),
-                        $q->expr()->eq('p.sys_language_uid', $q->createNamedParameter($language, \PDO::PARAM_INT))
+                    $q->expr()->and(
+                        $q->expr()->like('w.baseword', $q->createNamedParameter("%" . $q->escapeLikeWildcards($search) . "%")),
+                        $q->expr()->eq('p.sys_language_uid', $q->createNamedParameter($language))
                     )
                 )
-                ->setMaxResults(10);
+                ->setMaxResults(10)
+            ;
 
-            $suggestions = $q->execute()->fetchAll();
+            $suggestions = $q->executeQuery()->fetchAllAssociative();
 
-            return $this->buildJsonResponseFromQuery($suggestions);
+            return $this->jsonResponse($this->buildJsonResponseFromQuery($suggestions));
         }
     }
 
-    /**
-     * @return \TYPO3\CMS\Core\Database\Connection
-     */
-    protected function getDatabaseConnection()
+    protected function getDatabaseConnection(): Connection
     {
         return GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('index_words');
     }
 
-    /**
-     * @param $suggestions
-     * @return false|string
-     */
-    private function buildJsonResponseFromQuery($suggestions)
+    private function buildJsonResponseFromQuery(array $suggestions): string
     {
-        return json_encode($this->createValueMapFromStringArray($suggestions));
+        return json_encode($this->createValueMapFromStringArray($suggestions), JSON_THROW_ON_ERROR);
     }
 
-    /**
-     * @param $array
-     * @return array
-     */
-    private function createValueMapFromStringArray($array)
+    private function createValueMapFromStringArray(array $array): array
     {
         $options = [];
         foreach ($array as $value) {

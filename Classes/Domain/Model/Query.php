@@ -30,6 +30,7 @@ namespace Comsolit\ComsolitSuggest\Domain\Model;
 /**
  * Query
  */
-class Query extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
+class Query extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity 
+{
 
 }

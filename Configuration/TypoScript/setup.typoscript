@@ -30,13 +30,7 @@ ajaxCall {
 	typeNum = 999 
     config {
 		disableAllHeaderCode = 1
-		disablePrefixComment = 1
-		metaCharset = utf-8
-		xhtml_cleaning = 0
-		admPanel = 0
 		additionalHeaders = Content-type: application/json
-		debug = 0
-		no_cache = 0
 	}
     100 = COA 
     100 < tt_content.list.20.comsolitsuggest_suggest
