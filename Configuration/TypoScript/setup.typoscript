@@ -38,13 +38,13 @@ ajaxCall {
 
 page {
 	includeJSLibs {
-		jquery = EXT:comsolit_suggest/bower_components/jquery/dist/jquery.min.js
+		jquery = EXT:comsolit_suggest/Resources/Public/bower_components/jquery/dist/jquery.min.js
 		jquery {
 			if.isTrue = {$plugin.tx_comsolitsuggest.settings.includeJquery}
 		}
 	}
 	includeJSFooter  {
-		typeahead = EXT:comsolit_suggest/bower_components/typeahead.js/dist/typeahead.bundle_mod.js
+		typeahead = EXT:comsolit_suggest/Resources/Public/bower_components/typeahead.js/dist/typeahead.bundle_mod.js
 	}
 	includeCSS {
 		suggest = EXT:comsolit_suggest/Resources/Public/Css/suggest.css
