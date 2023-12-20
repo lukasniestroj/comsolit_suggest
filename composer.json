@@ -1,7 +1,7 @@
 {
   "name": "comsolit/comsolit_suggest",
   "type": "typo3-cms-extension",
-  "description": "Suggest Autocomplete Search Extension",
+  "description": "This Plugin extends the TYPO3 searchform with an autocomplete and suggest feature of words indexed from Ext:indexed_search based on a ajax request and typeahead lib, simple add just class=typeahead to your searchbox input field",
   "version": "4.0.0",
   "license": "GPL-3.0",
   "keywords": [
@@ -15,6 +15,7 @@
   },
   "require": {
     "typo3/cms-core": "^12.4",
+    "typo3/cms-indexed-search": "^12.4",
     "ext-pdo": "*",
     "ext-json": "*"
   },
@@ -29,5 +30,10 @@
       "email": "info@comsolit.com",
       "homepage": "https://www.comsolit.com/"
     }
-  ]
+  ],
+  "extra": {
+    "typo3/cms": {
+        "extension-key": "comsolit_suggest"
+    }
+}
 }
